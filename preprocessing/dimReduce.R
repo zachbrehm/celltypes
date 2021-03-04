@@ -6,7 +6,7 @@ library(Rtsne)
 ## for plotting using the cmd method and tsne method
 
 ## read in batch corrected gene expression data
-rse <- readRDS(file = "data/ruv_reference_2021_v2.Rds")
+rse <- readRDS(file = "data/ruv_reference.Rds")
 
 ## make rse into dds object for variance stabilizing
 dds <- DESeqDataSet(rse, design = ~1)

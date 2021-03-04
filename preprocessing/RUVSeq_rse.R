@@ -3,7 +3,7 @@ library(edgeR)
 library(RUVSeq)
 
 ## read in reference data for batch correction
-rse <- readRDS(file = "data/rse_reference_2021_v1.Rds")
+rse <- readRDS(file = "data/rse_reference.Rds")
 
 ## filter out low counts to ease computation
 low_counts <- apply(assay(rse, "counts"), MARGIN = 1, FUN = function(x){all(x < 1000)})
@@ -31,4 +31,4 @@ set0 <- RUVr(set, genes, k = 20, res)
 ## see ciber_prep.R for further steps
 ruv <- SummarizedExperiment(assays = list(counts = set0@assayData$normalizedCounts), 
                             rowData = rowData(rse), colData = colData(rse))
-saveRDS(ruv, file = "data/ruv_reference_2021_v2.Rds")
+saveRDS(ruv, file = "data/ruv_reference.Rds")

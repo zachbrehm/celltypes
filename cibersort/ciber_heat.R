@@ -1,7 +1,7 @@
 library(tidyverse)
 
 ## read in proportion estimates from cibersort
-ciberOut <- read.table(file = "cibersort/output/ciberOut_recount3.txt", header = TRUE)
+ciberOut <- read.table(file = "cibersort/output/ciberOut_gtexCoronary.txt", header = TRUE)
 
 ## extract sample and proportion values and pivot to long format for plotting
 res_ciber_df <- data.frame(ciberOut[,1:8]) %>% 
