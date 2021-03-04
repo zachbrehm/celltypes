@@ -29,15 +29,22 @@ cell-type found in a tissue. CIBERSORT requires 3 inputs.
 -   A **phenotype** indication table, **P**<sub>*h* × *j*</sub>, a
     matrix of *h* cell-types by *j* samples. The columns here must match
     to the samples in the reference data. Here, entry
-    *p*<sub>*m**n*</sub> = 1 if sample *n* is of cell-type *m*,
+    *p*<sub>*m*, *n*</sub> = 1 if sample *n* is of cell-type *m*,
     otherwise it will equal 2.
 
 All data used for this example was obtained with
 [recount3](https://bioconductor.org/packages/release/bioc/html/recount3.html).
 For the mixture data, we use coronary artery samples from
 [GTEx](https://www.gtexportal.org/home/), and the reference samples are
-from cell-types found in atherosclerotic artery. For our purposes, we
-will use the following cell-types:
+from cell-types found in atherosclerotic artery. Atherosclerosis is a
+disease which is strongly characterized by compositional changes in
+tissue. As this disease progresses, plaques develop along the inside of
+the artery, causing health complications or death. The nature of this
+disease makes it a natural candidate for deconvolution. For example, in
+a differential expression analyses, we would like to investigate whether
+shifts in gene expression can be attributed to differences in form
+between samples or differences in function between samples. For our
+purposes, we will use the following cell-types:
 
 -   Smooth muscle cells
 -   Endothelial cells
@@ -51,15 +58,30 @@ will use the following cell-types:
 
 This folder contains scripts to batch correct the reference data and
 reduce the dimensions of these data for plotting. Since our reference
-data are from numerous different experiments, The batch correction step
-is performed with `RUVr` from the
+data are from numerous different experiments, this step estimates and
+removes technical variation so we can better represent the underlying
+biology that we wish to estimate. The batch correction step is performed
+with `RUVr` from the
 [RUVSeq](https://bioconductor.org/packages/release/bioc/html/RUVSeq.html)
-package, and the dimension reduction is shown with both the
-multidimensional scaling and TSNE methods from with `cmdscale` in base R
-and `Rtsne` from the `Rtsne` package. The following plots serve as
-example results using each method.
+package. This script takes in the reference data that was acquired with
+`recount` and outputs a batch corrected version of the summarized
+experiment object.
 
-![](images/gg_cmd.svg) ![](images/gg_tsne.svg)
+We also want to plot the data to see if the samples from each cell-type
+are reasonably similar to one another. To do so, we calculate the
+pairwise euclidean distance between samples. This distance matrix is
+then used for a dimension reduction step to allow for plotting in a
+plane, and is demonstrated with both the multidimensional scaling and
+TSNE methods from with `cmdscale` in base R and `Rtsne` from the `Rtsne`
+package. The following plots serve as example results using each method.
+These are presented as static images here, but with the `plotly`
+package, we can create interactive plots and mouse over the points to
+identify which study the samples come from. These are saved as html
+files in the preprocessing folder.
+
+![](images/gg_cmd.svg)
+
+![](images/gg_tsne.svg)
 
 ## CIBERSORT
 
@@ -71,3 +93,28 @@ to each cell-type in the reference data. An example of this plot
 follows.
 
 ![](images/gg_ciberHeat.png)
+
+-   Smooth muscle cells are the most abundant cell-type. Smooth muscle
+    cells are the primary cell-type found in coronary artery, as they
+    are a main structural component of the artery itself.
+
+-   Endothelial cells line the interior of the artery, so they are
+    consistently found in small amounts across all samples.
+
+-   Erythrocytes are essentially nonexistant, which we expect to see
+    given that these samples are washed so little blood should remain in
+    them.
+
+-   Macrophages and lymphocytes are the main indicators of inflammation
+    and disease in these samples, weighted towards macrophages in
+    particular. They appear in small amounts more less consistently than
+    endothelial cells.
+
+-   Adipose tissue and cardiac muscle are not apart of a typical
+    coronary artery, but appear here since the GTEx samples present with
+    some excess tissue attached that was not trimmed off when harvested.
+    This is made apparent by the sporadic and sometimes large amounts of
+    adipose signal in the heatmap. Cardiac muscle appears in small
+    amounts more consistently, but as muscle tissue it shares some
+    similar characteristics with smooth muscle, making it difficult to
+    completely isolate these cell-types away from one another.

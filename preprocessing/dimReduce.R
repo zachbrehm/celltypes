@@ -30,7 +30,7 @@ cmdDf <- cmdscale(dist) %>%
          Project,
          everything())
 
-gg_cmd <- ggplot(cmDf, aes(x = V1, y = V2, text = Project, color = Celltype)) + 
+gg_cmd <- ggplot(cmDf, aes(x = V1, y = V2, color = Celltype, alpha = 0.8, text = Project)) + 
   geom_point() + 
   labs(title = "Dimension Reduction with CMD", 
        x = "First Dimension", 
@@ -44,11 +44,11 @@ gg_cmd <- ggplot(cmDf, aes(x = V1, y = V2, text = Project, color = Celltype)) +
                                    "Macrophage", 
                                    "Smooth Muscle"),
                         begin = 0, end = 0.95) + 
+  guides(alpha = FALSE) + 
   theme(panel.background = element_rect(fill = "white"),
         panel.grid.major = element_line("grey30", linetype = "dotted"),
         panel.grid.minor = element_line("grey30", linetype = "dotted"),
-        legend.key = element_rect(fill = "white"),
-        text = element_text(family = "Source Sans Pro"))
+        legend.key = element_rect(fill = "white"))
 
 ggsave(filename = "preprocessing/gg_cmd.svg", plot = gg_cmd, 
        device = "svg", dpi = 600, width = 11, height = 8.5, units = "in")
@@ -57,14 +57,19 @@ ggsave(filename = "preprocessing/gg_cmd.svg", plot = gg_cmd,
 cellTsne <- Rtsne(dist, is_distance = TRUE, perplexity = 40)
 
 ## make tsne dataframe and plot
-tsneDf <- data.frame(X = cellTsne$Y[,1], Y = cellTsne$Y[,2], Z = rse$celltype)
+tsneDf <- data.frame(X = cellTsne$Y[,1], 
+                     Y = cellTsne$Y[,2], 
+                     Z = rse$celltype,
+                     Project = rse$study)
 
-gg_tsne <- ggplot(tsneDf, aes(x = X, y = Y, color = Z)) + 
+gg_tsne <- ggplot(tsneDf, aes(x = X, y = Y, color = Z, text = Project, alpha = 0.8)) + 
   geom_point() + 
   labs(title = "Dimension Reduction with TSNE", 
        x = "First Dimension", 
        y = "Second Dimension", 
-       color = "Cell-Type") + 
+       color = "Cell-Type",
+       text = rse$study) + 
+  guides(alpha = FALSE) + 
   scale_color_viridis_d(labels = c("Cardiac Muscle", 
                                    "Endothelial", 
                                    "Erythrocyte", 
@@ -76,8 +81,7 @@ gg_tsne <- ggplot(tsneDf, aes(x = X, y = Y, color = Z)) +
   theme(panel.background = element_rect(fill = "white"),
         panel.grid.major = element_line("grey30", linetype = "dotted"),
         panel.grid.minor = element_line("grey30", linetype = "dotted"),
-        legend.key = element_rect(fill = "white"),
-        text = element_text(family = "Source Sans Pro"))
+        legend.key = element_rect(fill = "white"))
 
 ggsave(filename = "preprocessing/gg_tsne.svg", plot = gg_tsne, 
        device = "svg", dpi = 600, width = 10.5, height = 8, units = "in")
