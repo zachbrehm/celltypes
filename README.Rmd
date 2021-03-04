@@ -6,26 +6,6 @@ output:
   github_document
 ---
 
-```{css, echo = FALSE}
-  h1 {
-  font-family: Source Serif Pro, Georgia, serif;
-}
-
-h2 {
-  font-family: Source Serif Pro, Georgia, serif;
-}
-
-p {
-  font-family: Source Sans Pro, Calibri,sans-serif;
-}
-
-ul {
-  list-style-type: circle;
-  font-family: Source Sans Pro, sans-serif;
-}
-```
-
-
 ## Introduction
 
 This repository outlines the steps of a workflow to perform deconvolution of tissue gene expression data with [CIBERSORT](https://cibersort.stanford.edu/). Deconvolution methods are used to gain insight into the composition of whole tissue samples. A tissue is made of many different cell-types, and each cell-type expresses unique genes indicative of their functions. Knowledge of how much of each cell is present in a tissue can assist with differential expression analyses. 

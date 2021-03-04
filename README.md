@@ -13,7 +13,7 @@ h2 {
 }
 
 p {
-  font-family: Source Sans Pro, Calibri, sans-serif;
+  font-family: Source Sans Pro, Calibri,sans-serif;
 }
 
 ul {
