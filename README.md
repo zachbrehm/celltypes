@@ -3,25 +3,6 @@ Deconvolution Workflow: CIBERSORT
 Zachary Brehm
 3/3/2021
 
-<style type="text/css">
-  h1 {
-  font-family: Source Serif Pro, Georgia, serif;
-}
-
-h2 {
-  font-family: Source Serif Pro, Georgia, serif;
-}
-
-p {
-  font-family: Source Sans Pro, Calibri,sans-serif;
-}
-
-ul {
-  list-style-type: circle;
-  font-family: Source Sans Pro, sans-serif;
-}
-</style>
-
 ## Introduction
 
 This repository outlines the steps of a workflow to perform
