@@ -1,7 +1,7 @@
 Deconvolution Workflow: CIBERSORT
 ================
 Zachary Brehm
-2021-03-04
+2021-03-06
 
 ## Introduction
 
@@ -162,6 +162,12 @@ package, we can create interactive plots and mouse over the points to
 identify which study the samples come from. To do so, simply store the
 `ggplot2` output and feed it into the `ggplotly` function.
 
+The theme and color scales in these plots can be installed with
+
+``` r
+devtools::install_github("zachbrehm/ggmccalllab")
+```
+
 ``` r
 ## read in batch corrected gene expression data
 rse <- readRDS(file = "data/ruv_reference.Rds")
@@ -188,31 +194,25 @@ cmdDf <- cmdscale(dist) %>%
          Project,
          everything())
 
-gg_cmd <- ggplot(cmDf, aes(x = V1, y = V2, color = Celltype, alpha = 0.8, text = Project)) + 
+ggplot(cmDf, aes(x = V1, y = V2, color = Celltype, alpha = 0.8, text = Project)) + 
   geom_point() + 
-  labs(title = "Dimension Reduction with CMD", 
+  labs(title = "Cell-type data with dimension reduction by MDS", 
        x = "First Dimension", 
        y = "Second Dimension", 
        color = "Cell-Type") + 
-  scale_color_viridis_d(labels = c("Cardiac Muscle", 
+  scale_color_mccall_lab(labels = c("Cardiac Muscle", 
                                    "Endothelial", 
                                    "Erythrocyte", 
                                    "Adipocyte", 
                                    "Lymphocyte", 
                                    "Macrophage", 
                                    "Smooth Muscle"),
-                        begin = 0, end = 0.95) + 
+                        ) + 
   guides(alpha = FALSE) + 
-  theme(panel.background = element_rect(fill = "white"),
-        panel.grid.major = element_line("grey30", linetype = "dotted"),
-        panel.grid.minor = element_line("grey30", linetype = "dotted"),
-        legend.key = element_rect(fill = "white"))
-
-ggsave(filename = "preprocessing/gg_cmd.svg", plot = gg_cmd, 
-       device = "svg", dpi = 600, width = 11, height = 8.5, units = "in")
+  theme_mccall_lab()
 ```
 
-![](images/gg_cmd.svg)
+![](images/gg_cmds.png)
 
 With `Rtsne`:
 
@@ -226,33 +226,26 @@ tsneDf <- data.frame(X = cellTsne$Y[,1],
                      Z = rse$celltype,
                      Project = rse$study)
 
-gg_tsne <- ggplot(tsneDf, aes(x = X, y = Y, color = Z, text = Project, alpha = 0.8)) + 
+ggplot(tsneDf, aes(x = X, y = Y, color = Z, text = Project, alpha = 0.8)) + 
   geom_point() + 
-  labs(title = "Dimension Reduction with TSNE", 
+  labs(title = "Cell-type data with dimension reduction by TSNE", 
        x = "First Dimension", 
        y = "Second Dimension", 
        color = "Cell-Type",
        text = rse$study) + 
   guides(alpha = FALSE) + 
-  scale_color_viridis_d(labels = c("Cardiac Muscle", 
+  scale_color_mccall_lab(labels = c("Cardiac Muscle", 
                                    "Endothelial", 
                                    "Erythrocyte", 
                                    "Adipocyte", 
                                    "Lymphocyte", 
                                    "Macrophage", 
                                    "Smooth Muscle"),
-                        begin = 0, end = 0.95) + 
-                        ## with end = 1 the yellow is a bit too bright for a white background
-  theme(panel.background = element_rect(fill = "white"),
-        panel.grid.major = element_line("grey30", linetype = "dotted"),
-        panel.grid.minor = element_line("grey30", linetype = "dotted"),
-        legend.key = element_rect(fill = "white"))
-
-ggsave(filename = "preprocessing/gg_tsne.svg", plot = gg_tsne, 
-       device = "svg", dpi = 600, width = 10.5, height = 8, units = "in")
+                        ) +
+  theme_mccall_lab()
 ```
 
-![](images/gg_tsne.svg)
+![](images/gg_tsne.png)
 
 ## CIBERSORT
 
